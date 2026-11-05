@@ -11,7 +11,7 @@ const read=(k:string,fallback:any)=>{try{return JSON.parse(localStorage.getItem(
 const save=(k:string,v:any)=>{try{localStorage.setItem('yh:'+k,JSON.stringify(v));}catch{}};
 const actionNames:Record<string,string>={idle:'自在站着',walk:'慢慢散步',bow:'正在礼拜',kneel:'安静跪坐',greet:'合掌问好',dance:'开心跳舞',bracelet:'捧串跪候',beads:'静心拨珠',pet:'摸摸小朋友'};
 function Ring({color,size=150,count=18,rotation=0}:{color:string;size?:number;count?:number;rotation?:number}){
-  return <div className="bead-ring" aria-hidden="true" style={{width:size,height:size,transform:`rotate(${rotation}deg)`}}>{Array.from({length:count},(_,i)=>{const a=i/count*Math.PI*2;return <i key={i} style={{left:`${50+39*Math.cos(a)}%`,top:`${50+39*Math.sin(a)}%`,width:size*(count>20?.075:.105),height:size*(count>20?.075:.105),backgroundColor:i===0?'#b8924b':color}}/>;})}<span className="ring-knot" style={{backgroundColor:color}}/></div>;
+  return <div className="bead-ring" aria-hidden="true" style={{width:size,height:size,transform:`rotate(${rotation}deg)`}}>{Array.from({length:count},(_,i)=>{const a=i/count*Math.PI*2;return <i key={i} style={{left:`${(50+39*Math.cos(a)).toFixed(3)}%`,top:`${(50+39*Math.sin(a)).toFixed(3)}%`,width:size*(count>20?.075:.105),height:size*(count>20?.075:.105),backgroundColor:i===0?'#b8924b':color}}/>;})}<span className="ring-knot" style={{backgroundColor:color}}/></div>;
 }
 
 export default function Sanctuary(){
@@ -130,6 +130,7 @@ export default function Sanctuary(){
     </dialog>
   </main>;
 }
+
 
 
 
