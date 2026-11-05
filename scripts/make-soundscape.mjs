@@ -1,0 +1,11 @@
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+const out=fileURLToPath(new URL('../public/audio/',import.meta.url));mkdirSync(out,{recursive:true});const SR=22050;
+let seed=30;const random=()=>{seed=(1664525*seed+1013904223)>>>0;return seed/4294967296;};
+function write(name,data,fade=true){if(fade){const n=Math.min(SR,data.length/5|0);for(let i=0;i<n;i++){data[i]*=i/n;data[data.length-1-i]*=i/n;}}const b=Buffer.alloc(44+data.length*2);b.write('RIFF');b.writeUInt32LE(b.length-8,4);b.write('WAVEfmt ',8);b.writeUInt32LE(16,16);b.writeUInt16LE(1,20);b.writeUInt16LE(1,22);b.writeUInt32LE(SR,24);b.writeUInt32LE(SR*2,28);b.writeUInt16LE(2,32);b.writeUInt16LE(16,34);b.write('data',36);b.writeUInt32LE(data.length*2,40);for(let i=0;i<data.length;i++)b.writeInt16LE(Math.round(Math.max(-.96,Math.min(.96,data[i]))*32767),44+i*2);writeFileSync(out+name,b);}
+function tone(a,start,f,duration,amp=.12,decay=2){const first=start*SR|0;for(let i=0;i<duration*SR&&first+i<a.length;i++){const t=i/SR,env=Math.min(1,t*120)*Math.exp(-t*decay);a[first+i]+=amp*env*(Math.sin(Math.PI*2*f*t)+.24*Math.sin(Math.PI*2*f*2.01*t));}}
+let wind=new Float32Array(SR*20),v=0;for(let i=0;i<wind.length;i++){v=.985*v+.015*(random()*2-1);wind[i]=v*(.5+.16*Math.sin(i/SR*.7));}for(let j=0;j<12;j++){const start=1+random()*17,f=1400+random()*900;for(let n=0;n<2;n++)tone(wind,start+n*.17,f+n*160,.12,.025,24);}write('courtyard.wav',wind);
+const chimes=new Float32Array(SR*16);for(const [t,f]of[[1,784],[4,1046.5],[7.4,1174.7],[11,880]])tone(chimes,t,f,4,.10,1.4);write('chimes.wav',chimes);
+const music=new Float32Array(SR*16),notes=[261.63,329.63,392,440,392,329.63,293.66,329.63,261.63,392,440,523.25,440,392,329.63,293.66];for(let beat=0;beat<24;beat++){const at=beat*2/3;tone(music,at,notes[beat%16],.6,.12,5);tone(music,at,beat%2===0?65.4:98,.20,.10,18);for(let i=0;i<SR*.06;i++){const n=((at+.333)*SR|0)+i;if(n<music.length)music[n]+=(random()*2-1)*.018*Math.exp(-i/SR*60);}}write('moon-dance.wav',music);
+const wood=new Float32Array(SR/3|0);tone(wood,.002,620,.24,.30,25);tone(wood,.002,960,.18,.12,35);write('wood.wav',wood,false);const bell=new Float32Array(SR*3);tone(bell,.01,523.25,2.9,.17,1.5);tone(bell,.01,1048,2.9,.07,2.1);write('bell.wav',bell);
+console.log('Created five original soundscapes.');

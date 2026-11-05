@@ -1,0 +1,9 @@
+import { Howl, Howler } from 'howler';
+export function createSound(){
+  const sounds={ambient:new Howl({src:['/audio/courtyard.wav'],loop:true,volume:0}),chimes:new Howl({src:['/audio/chimes.wav'],loop:true,volume:0}),music:new Howl({src:['/audio/moon-dance.wav'],loop:true,volume:0}),wood:new Howl({src:['/audio/wood.wav'],volume:.4}),bell:new Howl({src:['/audio/bell.wav'],volume:.35})};
+  let enabled=false,garden=false,chant=false;
+  let levels={ambient:.55,music:.45,effects:.5};
+  function apply(){for(const s of [sounds.ambient,sounds.chimes,sounds.music])if(enabled&&!s.playing())s.play();sounds.ambient.volume(enabled?levels.ambient*.75:0);sounds.chimes.volume(enabled?levels.ambient*.32:0);sounds.music.volume(enabled&&garden?levels.music*.6:0);sounds.wood.volume(enabled?levels.effects*.7:0);sounds.bell.volume(enabled?levels.effects*.6:0);}
+  function say(){if(!chant||!enabled||!('speechSynthesis' in window))return;const u=new SpeechSynthesisUtterance('南无阿弥陀佛。');u.lang='zh-CN';u.rate=.65;u.pitch=.85;u.volume=levels.effects*.55;const voices=speechSynthesis.getVoices();const v=voices.find(x=>x.lang.startsWith('zh'));if(v)u.voice=v;u.onend=()=>{if(chant)setTimeout(say,3000)};u.onerror=()=>{chant=false};speechSynthesis.speak(u);}
+  return{enable(v:boolean){enabled=v;if(v)Howler.ctx?.resume();else{chant=false;if('speechSynthesis'in window)speechSynthesis.cancel();}apply();},area(id:string){garden=id==='garden';if(garden){chant=false;if('speechSynthesis'in window)speechSynthesis.cancel();}apply();},levels(v:typeof levels){levels=v;apply();},tap(){if(enabled)sounds.wood.play();},bell(){if(enabled)sounds.bell.play();},chant(v:boolean){if(!('speechSynthesis'in window))return false;chant=v;speechSynthesis.cancel();if(v)say();return true;},dispose(){chant=false;if('speechSynthesis'in window)speechSynthesis.cancel();Object.values(sounds).forEach(s=>s.unload());}};
+}

@@ -1,0 +1,90 @@
+[
+  {
+    "repo": "pmndrs/react-three-fiber",
+    "branch": "master",
+    "updated": "2026-10-21T15:24:39Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/pmndrs/react-three-fiber"
+  },
+  {
+    "repo": "pmndrs/drei",
+    "branch": "master",
+    "updated": "2026-10-21T09:19:21Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/pmndrs/drei"
+  },
+  {
+    "repo": "pmndrs/ecctrl",
+    "branch": "main",
+    "updated": "2026-09-06T22:39:03Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/pmndrs/ecctrl"
+  },
+  {
+    "repo": "colyseus/colyseus",
+    "branch": "master",
+    "updated": "2026-11-04T03:19:22Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/colyseus/colyseus"
+  },
+  {
+    "repo": "donmccurdy/three-pathfinding",
+    "branch": "main",
+    "updated": "2026-10-06T02:02:34Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/donmccurdy/three-pathfinding"
+  },
+  {
+    "repo": "isaac-mason/recast-navigation-js",
+    "branch": "main",
+    "updated": "2026-10-30T06:19:46Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/isaac-mason/recast-navigation-js"
+  },
+  {
+    "repo": "yomotsu/camera-controls",
+    "branch": "dev",
+    "updated": "2026-10-21T03:58:01Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/yomotsu/camera-controls"
+  },
+  {
+    "repo": "goldfire/howler.js",
+    "branch": "master",
+    "updated": "2025-11-23T23:49:01Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/goldfire/howler.js"
+  },
+  {
+    "repo": "xianyu110/cyber-sansa",
+    "branch": "main",
+    "updated": "2026-10-31T17:48:53Z",
+    "license": null,
+    "archived": false,
+    "url": "https://github.com/xianyu110/cyber-sansa"
+  },
+  {
+    "repo": "MengTo/kage",
+    "branch": "main",
+    "updated": "2026-08-09T04:46:45Z",
+    "license": null,
+    "archived": false,
+    "url": "https://github.com/MengTo/kage"
+  },
+  {
+    "repo": "Leonxlnx/golden-temple",
+    "branch": "main",
+    "updated": "2026-10-15T08:49:17Z",
+    "license": "MIT",
+    "archived": false,
+    "url": "https://github.com/Leonxlnx/golden-temple"
+  }
+]
