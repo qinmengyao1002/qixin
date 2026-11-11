@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import * as THREE from 'three';
+import { usableHit } from '../app/interaction-picking.js';
+
+const ray=new THREE.Raycaster(new THREE.Vector3(0,2,5),new THREE.Vector3(0,-.25,-1).normalize());
+const cafe=new THREE.Group();
+const steam=new THREE.Mesh(new THREE.SphereGeometry(.1),new THREE.MeshBasicMaterial());
+cafe.add(steam);steam.visible=false;steam.position.set(NaN,NaN,0);cafe.updateMatrixWorld(true);
+const badHits=ray.intersectObject(cafe,true);
+assert(badHits.length>0,'Reproduce dormant steam intercepting clicks');
+assert(badHits.every(hit=>!usableHit(hit)),'Reject non-finite steam intersections');
+steam.position.set(0,1,1);cafe.updateMatrixWorld(true);
+const hiddenHits=ray.intersectObject(cafe,true);
+assert(hiddenHits.length>0);
+assert(hiddenHits.every(hit=>!usableHit(hit)),'Invisible objects never intercept clicks');
+steam.visible=true;cafe.updateMatrixWorld(true);
+assert(ray.intersectObject(cafe,true).some(hit=>usableHit(hit)),'Visible objects remain interactive');
+cafe.visible=false;
+assert(ray.intersectObject(cafe,true).every(hit=>!usableHit(hit)),'Respect hidden ancestors');
+cafe.visible=true;
+assert(ray.intersectObject(cafe,true).every(hit=>!usableHit(hit,1)),'Do not pick beyond the ground');
+console.log('Interaction regression checks passed');

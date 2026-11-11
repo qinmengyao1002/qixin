@@ -1,0 +1,42 @@
+{
+  "license": "CC0",
+  "provider": "Poly Haven",
+  "assets": [
+    {
+      "asset": "forrest_ground_01",
+      "channel": "Diffuse",
+      "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_diff_1k.jpg",
+      "file": "forest-color.webp"
+    },
+    {
+      "asset": "forrest_ground_01",
+      "channel": "nor_gl",
+      "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_nor_gl_1k.jpg",
+      "file": "forest-normal.webp"
+    },
+    {
+      "asset": "forrest_ground_01",
+      "channel": "Rough",
+      "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_rough_1k.jpg",
+      "file": "forest-roughness.webp"
+    },
+    {
+      "asset": "rock_tile_floor",
+      "channel": "Diffuse",
+      "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_tile_floor/rock_tile_floor_diff_1k.jpg",
+      "file": "stone-color.webp"
+    },
+    {
+      "asset": "rock_tile_floor",
+      "channel": "nor_gl",
+      "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_tile_floor/rock_tile_floor_nor_gl_1k.jpg",
+      "file": "stone-normal.webp"
+    },
+    {
+      "asset": "rock_tile_floor",
+      "channel": "Rough",
+      "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_tile_floor/rock_tile_floor_rough_1k.jpg",
+      "file": "stone-roughness.webp"
+    }
+  ]
+}
