@@ -433,7 +433,19 @@ export function createWorld(container,onEvent,options={}){
     actors().forEach(p=>{if(p.label){const d=p.root.position.distanceTo(player.root.position);p.label.visible=(followCamera&&d<4.5)||p===selected;p.label.material.opacity=p===selected?1:Math.max(.3,1-d/12);}});
     if(Math.floor(clock*2)!==nearbyStamp){nearbyStamp=Math.floor(clock*2);onEvent({type:'nearby',items:actors().map(describe).sort((a,b)=>a.distance-b.distance)});}
 
-    if(!paused&&path.length){const target=path[0],delta=target.clone().sub(player.root.position);delta.y=0;const distance=delta.length();if(distance<.08){path.shift();if(!path.length){destinationRing.visible=false;if(afterWalk&&typeof afterWalk==='object'){const crossing=afterWalk;afterWalk=null;action='idle';onEvent({type:'navigate',area:crossing.destination,pray:crossing.pray});return;}action=afterWalk||'idle';if(action==='interact')finishInteraction();if(action==='rest'){const b=BENCHES.find(b=>b.id===seat);player.root.rotation.y=b?.yaw||0;if(b){followCamera=false;controls.setLookAt(b.x+(b.x>0?-3.5:3.5),3.4,b.z+.7,b.x,.9,b.z,true);onEvent({type:'cameraMode',mode:'overview'});}}if(action==='pickup'){player.root.rotation.y=Math.PI;startSequence('pickup',()=>{carryingIncense=true;if(!moveTo(0,-3.2,'incense'))cancelSequence();onEvent({type:'hint',text:'双手拿稳，慢慢走到香炉前。'});});}else if(action==='incense'){player.root.rotation.y=Math.PI;startSequence('incense',()=>{onEvent({type:'hint',text:'香已插好，愿你此刻心安。'});});}if(action==='lampReady'){action='idle';player.root.rotation.y=-Math.PI/2;if(arrivalResolve){arrivalResolve(true);arrivalResolve=null;}}if(action==='brew'){action='idle';player.root.rotation.y=Math.PI;followCamera=false;controls.setLookAt(3.5,2.6,4.5,6.2,1.35,1.7,true);onEvent({type:'cameraMode',mode:'overview'});brewAt=clock+3;gardenDetails?.teaService?.start(clock);onEvent({type:'hint',text:'正在为你备茶，稍等三秒。'});}if(action==='pond'){action='idle';player.root.rotation.y=-Math.PI/2;}if(action==='tea'){action='greet';player.root.rotation.y=0;teaUntil=clock+9;bubble(player,'捧一盏茶 · 慢慢喝');onEvent({type:'hint',text:'松风茶已备好，停留片刻。点空地即可离开。'});}if(['kneel','bow','bracelet'].includes(action))player.root.rotation.y=Math.PI;onEvent({type:'action',action,seat});afterWalk=null;}}else{delta.normalize();player.root.position.addScaledVector(delta,Math.min(distance,dt*3.3));player.root.rotation.y+=Math.atan2(Math.sin(Math.atan2(delta.x,delta.z)-player.root.rotation.y),Math.cos(Math.atan2(delta.x,delta.z)-player.root.rotation.y))*(1-Math.exp(-dt*12));}}
+    if(!paused&&path.length){const target=path[0],delta=target.clone().sub(player.root.position);delta.y=0;const distance=delta.length();if(distance<.08){path.shift();if(!path.length){destinationRing.visible=false;if(afterWalk&&typeof afterWalk==='object'){const crossing=afterWalk;afterWalk=null;action='idle';onEvent({type:'navigate',area:crossing.destination,pray:crossing.pray});return;}action=afterWalk||'idle';if(action==='interact')finishInteraction();if(action==='rest'){const b=BENCHES.find(b=>b.id===seat);player.root.rotation.y=b?.yaw||0;if(b){followCamera=false;controls.setLookAt(b.x+(b.x>0?-3.5:3.5),3.4,b.z+.7,b.x,.9,b.z,true);onEvent({type:'cameraMode',mode:'overview'});}}if(action==='pickup'){player.root.rotation.y=Math.PI;startSequence('pickup',()=>{carryingIncense=true;if(!moveTo(0,-3.2,'incense'))cancelSequence();onEvent({type:'hint',text:'双手拿稳，慢慢走到香炉前。'});});}else if(action==='incense'){player.root.rotation.y=Math.PI;startSequence('incense',()=>{onEvent({type:'hint',text:'香已插好，愿你此刻心安。'});});}if(action==='returnCup'){
+      player.root.rotation.y=Math.PI/2;
+      startSequence('returnCup',()=>{
+        const returned=teaCup.clone();
+        stage.add(returned);
+        const previous=stage.getObjectByName('returned-cup');
+        if(previous)stage.remove(previous);
+        returned.name='returned-cup';returned.visible=true;
+        returned.position.set(6.56,.86,8.6);returned.rotation.set(0,0,0);
+        heldDrink=null;teaCup.visible=false;
+        onEvent({type:'cupReturned'});
+      });
+    }if(action==='lampReady'){action='idle';player.root.rotation.y=-Math.PI/2;if(arrivalResolve){arrivalResolve(true);arrivalResolve=null;}}if(action==='brew'){action='idle';player.root.rotation.y=Math.PI;followCamera=false;controls.setLookAt(3.5,2.6,4.5,6.2,1.35,1.7,true);onEvent({type:'cameraMode',mode:'overview'});brewAt=clock+3;gardenDetails?.teaService?.start(clock);onEvent({type:'hint',text:'正在为你备茶，稍等三秒。'});}if(action==='pond'){action='idle';player.root.rotation.y=-Math.PI/2;}if(action==='tea'){action='greet';player.root.rotation.y=0;teaUntil=clock+9;bubble(player,'捧一盏茶 · 慢慢喝');onEvent({type:'hint',text:'松风茶已备好，停留片刻。点空地即可离开。'});}if(['kneel','bow','bracelet'].includes(action))player.root.rotation.y=Math.PI;onEvent({type:'action',action,seat});afterWalk=null;}}else{delta.normalize();player.root.position.addScaledVector(delta,Math.min(distance,dt*3.3));player.root.rotation.y+=Math.atan2(Math.sin(Math.atan2(delta.x,delta.z)-player.root.rotation.y),Math.cos(Math.atan2(delta.x,delta.z)-player.root.rotation.y))*(1-Math.exp(-dt*12));}}
     if(!paused&&keys.size){const f=keyboardForward;const r=new THREE.Vector3(-f.z,0,f.x);const d=new THREE.Vector3();if(keys.has('w')||keys.has('arrowup'))d.add(f);if(keys.has('s')||keys.has('arrowdown'))d.sub(f);if(keys.has('d')||keys.has('arrowright'))d.add(r);if(keys.has('a')||keys.has('arrowleft'))d.sub(r);d.normalize();const v=player.root.position.clone().addScaledVector(d,dt*3.5);if(walkable(v.x,v.z)){player.root.position.copy(v);player.root.rotation.y=Math.atan2(d.x,d.z);action='walk';}}
     else if(action==='walk'&&!path.length)action='idle';
     if(followCamera){
@@ -456,6 +468,10 @@ export function createWorld(container,onEvent,options={}){
       const center=hands[0].add(hands[1]).multiplyScalar(.5);
       if(current.kind==='pickup'){const t=clock-current.at;incenseProp.visible=t>=1.3;if(stockIncense)stockIncense.visible=t<1.3;const f=THREE.MathUtils.smoothstep(t,1.3,3.1);center.lerp(new THREE.Vector3(-1.7,.94,-4.27),1-f);incenseProp.position.copy(player.root.worldToLocal(center));incenseProp.rotation.z=(1-f)*Math.PI/2;}
       if(current.kind==='incense'){incenseProp.rotation.z=0;incenseProp.visible=pose.release<1;const place=new THREE.Vector3(0,1.32,-4.3);const reach=THREE.MathUtils.smoothstep(clock-current.at,3.2,5.4);center.lerp(place,reach);center.y-=.32*THREE.MathUtils.smoothstep(clock-current.at,5.4,7.4);incenseProp.position.copy(player.root.worldToLocal(center));if(pose.release>=1&&carryingIncense&&placedIncense){carryingIncense=false;placedIncense.visible=true;incenseUntil=clock+28;renderer.shadowMap.needsUpdate=true;}}
+      if(current.kind==='returnCup'){
+        center.lerp(new THREE.Vector3(6.56,.86,8.6),pose.release);
+        teaCup.visible=true;teaCup.position.copy(player.root.worldToLocal(center));
+      }
       if(current.kind==='lantern'){heldLamp.visible=clock-current.at<3.8;center.lerp(new THREE.Vector3(-3.3,.23,6.3),pose.release);heldLamp.position.copy(player.root.worldToLocal(center));}
       if(current.kind==='sip'||current.kind==='receive'){teaCup.visible=!!heldDrink;teaCup.position.copy(player.root.worldToLocal(center));teaCup.position.y+=.06;teaCup.rotation.x=current.kind==='sip'?Math.sin(Math.min(1,(clock-current.at)/3)*Math.PI)*.22:0;}
       if(current.label!==pose.label){current.label=pose.label;onEvent({type:'hint',text:pose.label+' · 点空地可停下'});}
@@ -485,6 +501,11 @@ export function createWorld(container,onEvent,options={}){
     restBench(id){const b=BENCHES.find(b=>b.id===id);if(!b)return false;resetWalk();seat=id;return moveTo(b.x,b.z,'rest');},
     orderDrink(id){if(!DRINKS.some(d=>d.id===id))return false;resetWalk();order=id;brewAt=0;heldDrink=null;homeView();return moveTo(6.3,2.9,'brew');},
     sip(){if(!heldDrink||path.length||sequence)return false;player.seated=seat>=100;startSequence('sip');return true;},
+    returnCup(){
+      if (!heldDrink || area !== 'court') return false;
+      resetWalk();
+      return moveTo(6.3,8.6,'returnCup');
+    },
     putCup(){heldDrink=null;},
     cancelDrink(){cancelSequence();heldDrink=null;order=null;brewAt=0;if(afterWalk==='brew')resetWalk();},
     visitPond(){resetWalk();moveTo(-2.2,6.3,'pond');followCamera=false;controls.setLookAt(3,5,9.5,-5.7,.65,6.3,true);onEvent({type:'cameraMode',mode:'overview'});},

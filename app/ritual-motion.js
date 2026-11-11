@@ -1,6 +1,6 @@
 // Timed poses use smooth interpolation, independent of rendering frame rate.
 const smooth = x => { x=Math.max(0,Math.min(1,x)); return x*x*(3-2*x); };
-export const RITUAL_DURATION={pickup:3.4,incense:9.2,lantern:5.6,receive:1.8,sip:3};
+export const RITUAL_DURATION={pickup:3.4,incense:9.2,lantern:5.6,receive:1.8,sip:3,returnCup:2.4};
 const poses={
   pickup:[[0,0,0,0,'走到取香台'],[1.3,-1.3,.26,0,'伸手取香'],[2.4,-1.5,.12,0,'轻轻拿起香'],[3.4,-1.45,0,0,'双手捧好香']],
   incense:[
@@ -11,6 +11,7 @@ const poses={
     [2,-1.3,.35,0,'俯身临水'],[3.8,-.9,.65,1,'轻放入水'],
     [4.6,-.7,.5,1,'松手送灯'],[5.6,0,0,1,'看灯漂远']],
   receive:[[0,-.3,0,0,'伸手接杯'],[.8,-1.6,.12,0,'双手接杯'],[1.8,-1.25,0,1,'捧好饮品']],
+  returnCup:[[0,-1.25,0,0,'捧稳茶杯'],[1.5,-1.4,.28,1,'俯身放上茶桌'],[2.4,0,0,1,'松手收回']],
   sip:[[0,-1.25,0,0,'捧起茶杯'],[.8,-2.1,-.04,0,'轻抿一口'],[1.7,-2.1,-.04,0,'轻抿一口'],[3,-1.25,0,1,'慢慢放下']],
 };
 export function ritualPose(kind,time){
